@@ -100,3 +100,8 @@ def create_request(ride_id):
             'Request by': current_user
             }
         return make_response(jsonify(response)), 201
+
+@ride_blueprint.route('/api/v1/rides/<int:ride_id>/requests', methods=['GET'])
+def get_request(ride_id):
+    '''Route to get a requets'''
+    return make_response(jsonify(Request.get_all_requests())), 200
