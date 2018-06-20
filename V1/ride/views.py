@@ -68,4 +68,10 @@ def create_ride():
         return make_response(jsonify(response)), 201
 
 
-
+@ride_blueprint.route('/api/v1/rides', methods=['GET'])
+@jwt_required
+def get_rides():
+    '''route to get all rides'''
+    # If GET method
+    rides = Ride.get_all_rides()
+    return make_response(jsonify(rides)), 200
