@@ -76,5 +76,41 @@ def register_user():
         return jsonify({'message':'User Succesfully Registered'}), 201
 
 
+@app.route('/api/v1/auth/login', methods=['POST'])
+def login():
+
+    '''Route to login'''
+    if not request.is_json:
+        return jsonify({"msg": "Missing JSON in request"}), 400
+
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+    dict_data = {'username':username, 'password':password}
+    if validate.val_none(**dict_data):
+        result = validate.val_none(**dict_data)
+        return jsonify(result), 406
+    if validate.empty(**dict_data):
+        result = validate.empty(**dict_data)
+        return jsonify(result), 406
+    person = User.users.items()
+    existing_user = {k:v for k, v in person if data['username'] == v['username']}
+    if existing_user:
+        valid_user = [v for v in existing_user.values()
+                      if check_password_hash(v['password'], password)]
+        if valid_user:
+            access_token = create_access_token(identity=username)
+            if access_token:
+                response = {
+                    'message': 'You are logged in successfully',
+                    'access_token': access_token
+                }
+                return make_response(jsonify(response)), 200
+        else:
+            return jsonify({'message': 'Wrong password'}), 400
+    else:
+        return jsonify({'message': 'Non-existent user. Try signing up'}), 404
+
+
 
 
