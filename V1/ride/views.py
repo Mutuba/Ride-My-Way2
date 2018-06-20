@@ -75,3 +75,13 @@ def get_rides():
     # If GET method
     rides = Ride.get_all_rides()
     return make_response(jsonify(rides)), 200
+
+@ride_blueprint.route('/api/v1/rides/<int:ride_id>', methods=['GET'])
+def get_a_ride(ride_id):
+    '''route to get a ride info'''
+    target_ride = Ride.get_ride(ride_id)
+    if target_ride:
+        return make_response(jsonify(target_ride)), 200
+    else:
+        return jsonify(
+            {'message': 'Resource Not Found'}), 404
