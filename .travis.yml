@@ -4,7 +4,7 @@ python: '3.5.2'
 
 addons:
   jwt:
-     secure: <SAUCE_ACCESS_KEY ENCRYPTED>
+     secure: 'cbbfvfjjfjjjfsjajjkkvsjh4636787531r9898298981'
 
 # Install dependencies
 install: 
