@@ -80,6 +80,7 @@ def register_user():
 def login():
 
     '''Route to login'''
+    
     if not request.is_json:
         return jsonify({"msg": "Missing JSON in request"}), 400
 
