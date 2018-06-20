@@ -114,4 +114,33 @@ def login():
 
 
 
+@app.route('/api/v1/auth/change_password', methods=['POST'])
+@jwt_required
+def change_password():
+
+    '''Route to change password'''
+    current_user = get_jwt_identity()
+    data = request.get_json()
+    old_password = data.get('old_password')
+    new_password = data.get('new_password')
+    dict_data = {'old_password':old_password, 'new_password':new_password}
+    if validate.val_none(**dict_data):
+        result = validate.val_none(**dict_data)
+        return jsonify(result), 406
+    if validate.empty(**dict_data):
+        result = validate.empty(**dict_data)
+        return jsonify(result), 406
+    val_length = validate.pass_length(dict_data['new_password'])
+    if val_length:
+        return jsonify({'message': 'Password is weak! Must have atleast 8 characters'}), 406
+    person = User.users.items()
+    existing_username = {k:v for k, v in person if current_user == v['username']}
+    valid_user = [v for v in existing_username.values()
+                  if check_password_hash(v['password'], old_password)]
+    if valid_user:
+        User.change_password(current_user, data)
+        return jsonify({'message': 'Reset successful'}), 200
+    else:
+        return jsonify({'message': 'Wrong Password. Cannot reset. Forgotten password?'}), 401
+
 
