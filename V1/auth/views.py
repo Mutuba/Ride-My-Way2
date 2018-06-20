@@ -144,3 +144,10 @@ def change_password():
         return jsonify({'message': 'Wrong Password. Cannot reset. Forgotten password?'}), 401
 
 
+@app.route('/api/v1/auth/logout', methods=['POST'])
+@jwt_required
+def logout():
+    '''Route to logut'''
+    dump = get_raw_jwt()['jti']
+    blacklist.add(dump)
+    return jsonify({'message': 'Logout successful'}), 200
