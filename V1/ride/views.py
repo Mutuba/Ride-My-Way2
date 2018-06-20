@@ -85,3 +85,18 @@ def get_a_ride(ride_id):
     else:
         return jsonify(
             {'message': 'Resource Not Found'}), 404
+
+@ride_blueprint.route('/api/v1/rides/<int:ride_id>/requests', methods=['POST'])
+@jwt_required
+def create_request(ride_id):
+    '''Route to post a ride request'''
+    current_user = get_jwt_identity()
+    if request.method == 'POST':
+        requester = current_user
+        new_request = Request(requester)
+        new_request.add_request()
+        response = {
+            'message': 'Request Posted',
+            'Request by': current_user
+            }
+        return make_response(jsonify(response)), 201
