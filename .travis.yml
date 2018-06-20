@@ -2,6 +2,9 @@ language: python
 
 python: '3.5.2'
 
+addons:
+  jwt:
+     secure: <SAUCE_ACCESS_KEY ENCRYPTED>
 
 # Install dependencies
 install: 
