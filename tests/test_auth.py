@@ -1,4 +1,4 @@
-'''WeConnect Users Test File'''
+
 import unittest
 import json
 from V1 import app
