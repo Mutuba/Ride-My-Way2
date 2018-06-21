@@ -42,32 +42,34 @@ class User:
 class Ride:
     '''Ride class'''
 
-    #Class Variables
+    # Class Variables
     ride_id = 0
     ride = {}
 
-    def __init__(self, category, pick_up, drop_off, date_time, price, username):
+    def __init__(
+        self, category, pick_up,
+        drop_off, date_time, price, username
+    ):
         '''Initialize'''
         self.category = category
-        self.pick_up= pick_up
+        self.pick_up = pick_up
         self.drop_off = drop_off
-        self.date_time=date_time
-        self.price=price
+        self.date_time = date_time
+        self.price = price
         self.username = username
-
 
     def create_ride(self):
         '''Create a ride'''
         Ride.ride_id += 1
         self.ride.update({
-            self.ride_id:{
+            self.ride_id: {
                 'user_id': User.user_id,
-                'category':self.category,
-                'pick_up':self.pick_up,
-                'drop_off':self.drop_off,
-                'date_time':self.date_time,
-                'price':self.price,
-                'owner':self.username
+                'category': self.category,
+                'pick_up': self.pick_up,
+                'drop_off': self.drop_off,
+                'date_time': self.date_time,
+                'price': self.price,
+                'owner': self.username
             }
         })
         return self.ride
@@ -79,7 +81,7 @@ class Ride:
         if len(rides) > 0:
             return rides
         else:
-            return {"message":"No rides.Please add one"}
+            return {"message": "No rides.Please add one"}
 
     @staticmethod
     def delete_ride(ride_id):
@@ -88,7 +90,9 @@ class Ride:
         for key in del_ride:
             if key == ride_id:
                 del del_ride[key]
+
                 return {"message": "Deleted Successfully"}
+
     @staticmethod
     def get_ride(ride_id):
         '''method to get a ride'''
@@ -96,10 +100,12 @@ class Ride:
         for key in my_ride:
             if key == ride_id:
                 return my_ride[key]
+
     @staticmethod
     def update_ride(ride_id, data):
         '''method to update a ride'''
-        njaro= Ride.ride
+
+        njaro = Ride.ride
         for key in njaro:
             if key == ride_id:
                 if 'category' in data.keys():
@@ -111,7 +117,7 @@ class Ride:
                 if 'date_time' in data.keys():
                     njaro[key]['date_time'] = data['date_time']
                 if 'price' in data.keys():
-                    njaro[key][price] = data['price']
+                    njaro[key]['price'] = data['price']
                 return njaro
 
 
@@ -135,7 +141,8 @@ class Request:
                 'requester': self.requester
             }
         })
-        return  self.requests
+        return self.requests
+
 
     @staticmethod
     def get_all_requests():

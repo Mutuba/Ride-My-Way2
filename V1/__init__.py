@@ -1,17 +1,12 @@
-# services/users/project/__init__.py
-import os
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity, get_raw_jwt
+# __init__.py
 
+from flask import Flask
 
 
 # instantiate the app
 app = Flask(__name__, instance_relative_config=True)
 
 # set config
-# app_settings = os.getenv('APP_SETTINGS')
-# app.config.from_object(app_settings)
 app.config.from_object('config')
 
 
