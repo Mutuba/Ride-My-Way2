@@ -282,7 +282,7 @@ class UserAuthTestcase(unittest.TestCase):
                           })
 
         response = self.app.post("/api/v1/auth/login",
-                                 data=json.dumps(dict(username="mutuba", password="12348765")),
+                                 data=json.dumps(dict(username="mutuba", password="12345678")),
                                  content_type="application/json")
         self.assertEqual(response.status_code, 200)
         response_msg = json.loads(response.data.decode("UTF-8"))

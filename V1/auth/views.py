@@ -9,6 +9,7 @@ from V1 import app # pragma: no cover
 from flask_mail import Mail, Message 
 from flask import Blueprint,\
     jsonify, request, make_response  # pragma: no cover
+import datetime
 
 auth_blueprint = Blueprint('auth', __name__)
 users = []
@@ -100,7 +101,10 @@ def login():
         valid_user = [v for v in existing_user.values()
                       if check_password_hash(v['password'], password)]
         if valid_user:
-            access_token = create_access_token(identity=username)
+            username = get_jwt_identity()
+            expires = datetime.timedelta(days=365)
+            access_token = create_access_token(
+                username, expires_delta=expires)
             if access_token:
                 response = {
                     'message': 'You are logged in successfully',
