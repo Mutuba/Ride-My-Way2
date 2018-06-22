@@ -75,12 +75,12 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9eyJpYXQiO
 | /api/auth/v1/logout | POST | Logs out a user | TRUE
 | /api/auth/v1/change_password | POST | Change user password | TRUE
 | /api/v1/rides | POST | Creates a ride | TRUE
-| /api/v1/rides | GET | Retrieves all rides | FALSE 
-| /api/v1/rides/{ride_id} | GET | Get a ride | FALSE
+| /api/v1/rides | GET | Retrieves all rides | TRUE 
+| /api/v1/rides/{ride_id} | GET | Get a ride | TRUE
 | /api/v1/rides/{ride_id} | PUT | Update a ride details | TRUE
 | /api/v1/rides/{ride_id} | DELETE | Delete a ride | TRUE
 | /api/v1/rides/{ride_id}/requests | POST | Request a ride | TRUE
-| /api/v1/rides/{ride_id}/requests | GET | Get all requests for a ride | FALSE
+| /api/v1/rides/{ride_id}/requests | GET | Get all requests for a ride | TRUE
 
 
 
