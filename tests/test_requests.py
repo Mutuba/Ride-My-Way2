@@ -1,4 +1,4 @@
-'''WeConnect Reviews Test File'''
+'''Test Ride requests'''
 import unittest
 import json
 from V1 import app
@@ -9,34 +9,31 @@ class RequestsTestCase(unittest.TestCase):
 
     def setUp(self):
         self.app = app.test_client(self)
-        # User 1
+        # User 1 registration
         self.app.post(
             "/api/v1/auth/register",
             data=json.dumps(dict(
-                email="kelvin@live.com", username="kelvin",
+                email="dmutush@live.com", username="daniel",
                 password="12345678")), content_type="application/json")
-        self.login_user = self.app.post(
-            "/api/v1/auth/login",
-            data=json.dumps(dict(
-                username="kelvin",
-                password="12345678")), content_type="application/json")
-        self.access_token = json.loads(
-            self.login_user.data.decode())['access_token']
-
-        # User 2
+        # User 2 registration
         self.app.post(
             "/api/v1/auth/register",
             data=json.dumps(dict(
-                email="lynn@live.com", username="lynn",
-                password="12345678")), content_type="application/json")
-        self.login_user2 = self.app.post(
-            "/api/v1/auth/login",
-            data=json.dumps(dict(
-                username="lynn",
+                email="kenmigoma@gmail.com", username="migoma",
                 password="12345678")), content_type="application/json")
 
-        self.access_token2 = json.loads(
-            self.login_user2.data.decode())['access_token']
+        self.user = self.app.post(
+            "/api/v1/auth/login",
+            data=json.dumps(dict(
+                username="daniel",
+                password="12345678")), content_type="application/json")
+        self.access_token = json.loads(self.user.data.decode())['access_token']
+
+        self.user = self.app.post(
+            "/api/v1/auth/login",
+            data=json.dumps(dict(
+                username="migoma",
+                password="12345678")), content_type="application/json")
 
         # Ride 1
         self.app.post(
@@ -55,7 +52,7 @@ class RequestsTestCase(unittest.TestCase):
             price="Ksh. 700")
 
     def test_add_request(self):
-        '''test add review'''
+        '''test add request'''
         response = self.app.post(
             "/api/v1/rides/1/requests",
             headers={
@@ -64,7 +61,7 @@ class RequestsTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 201)
 
     def test_get_requests(self):
-        '''Test get all reviews'''
+        '''Test get all requests'''
         response = self.app.get(
             "/api/v1/rides/1/requests",
             headers={
