@@ -5,26 +5,15 @@ from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token,
     get_jwt_identity, get_raw_jwt
 )
-from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.security import check_password_hash
 from V1.auth import validate  # pragma: no cover
 from V1 import app  # pragma: no cover
-from flask_mail import Mail, Message
 from flask import Blueprint,\
     jsonify, request, make_response  # pragma: no cover
 
 auth_blueprint = Blueprint('auth', __name__)
 users = []
 logged_in_user = None
-
-# Mail configuration
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'hcravens25@gmail.com'
-app.config['MAIL_PASSWORD'] = 'ravens201'
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_DEFAULT_SENDER'] = 'hcravens25@gmail.com'
-mail = Mail(app)
 
 # Setup the Flask-JWT-Extended extension
 app.config['JWT_SECRET_KEY'] = 'super-secret'
@@ -41,7 +30,7 @@ def check_if_token_in_blacklist(decrypted_token):
     return jti in blacklist
 
 
-@app.route('/api/v1/auth/register', methods=['POST'])
+@auth_blueprint.route('/api/v1/auth/register', methods=['POST'])
 def register_user():
     '''Route to register user'''
     data = request.get_json()
@@ -86,7 +75,7 @@ def register_user():
         return jsonify({'message': 'User Succesfully Registered'}), 201
 
 
-@app.route('/api/v1/auth/login', methods=['POST'])
+@auth_blueprint.route('/api/v1/auth/login', methods=['POST'])
 def login():
     '''Route to login'''
 
@@ -124,7 +113,7 @@ def login():
         return jsonify({'message': 'Non-existent user. Try signing up'}), 404
 
 
-@app.route('/api/v1/auth/change_password', methods=['POST'])
+@auth_blueprint.route('/api/v1/auth/change_password', methods=['POST'])
 @jwt_required
 def change_password():
     '''Route to change password'''
@@ -158,44 +147,7 @@ def change_password():
                 'Wrong Password. Cannot reset. Forgotten password?'}), 401
 
 
-@app.route('/api/v1/auth/reset_password', methods=['POST'])
-def reset_password():
-    '''Route to reset password'''
-    data = request.get_json()
-    username = data.get('username')
-
-    dict_data = {'username': username}
-    if validate.val_none(**dict_data):
-        result = validate.val_none(**dict_data)
-        return jsonify(result), 406
-    if validate.empty(**dict_data):
-        result = validate.empty(**dict_data)
-        return jsonify(result), 406
-
-    person = User.users.items()
-    existing_username = {k: v for k, v in person if username == v['username']}
-    print(existing_username)
-
-    if existing_username:
-        for key in existing_username:
-            password = str(uuid.uuid4())[:8]
-            message = Message(
-                subject="Password Reset",
-                sender='hcravens25@gmail.com',
-                recipients=[existing_username[key]['email']],
-                body="Hello " +
-                existing_username[key]['username'] +
-                ",\n Your new password is:" + password)
-            mail.send(message)
-            existing_username[key]['password'] = generate_password_hash(
-                password)
-        return jsonify(
-            {'message': 'An email has been sent with your new password!'}), 200
-
-    return jsonify({'message': 'Non-existent user. Try signing up'}), 404
-
-
-@app.route('/api/v1/auth/logout', methods=['POST'])
+@auth_blueprint.route('/api/v1/auth/logout', methods=['POST'])
 @jwt_required
 def logout():
     '''Route to logut'''

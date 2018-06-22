@@ -4,7 +4,6 @@ from flask_jwt_extended import (
     get_jwt_identity, get_raw_jwt
 )
 from V1.auth import validate  # pragma: no cover
-from flask_mail import Mail
 from V1 import app  # pragma: no cover
 from flask import Blueprint,\
     jsonify, request, make_response  # pragma: no cover
@@ -12,16 +11,6 @@ from flask import Blueprint,\
 ride_blueprint = Blueprint('ride', __name__)
 users = []
 logged_in_user = None
-
-# Mail configuration
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'danielmutuba@gmail.com'
-app.config['MAIL_PASSWORD'] = 'nandash18'
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_DEFAULT_SENDER'] = 'danielmutuba@gmail.com'
-mail = Mail(app)
 
 # Setup the Flask-JWT-Extended extension
 app.config['JWT_SECRET_KEY'] = 'super-secret'
@@ -41,7 +30,7 @@ def check_if_token_in_blacklist(decrypted_token):
 @ride_blueprint.route('/api/v1/rides', methods=['POST'])
 @jwt_required
 def create_ride():
-    '''Businesss registration route'''
+    '''Ride creation route'''
     current_user = get_jwt_identity()
     data = request.get_json()
     category = data.get('category')
@@ -75,7 +64,7 @@ def create_ride():
         return make_response(jsonify(response)), 201
 
 
-@app.route('/api/v1/rides/<int:ride_id>', methods=['DELETE'])
+@ride_blueprint.route('/api/v1/rides/<int:ride_id>', methods=['DELETE'])
 @jwt_required
 def delete_ride(ride_id):
     '''Route for deleting a ride'''
@@ -91,7 +80,7 @@ def delete_ride(ride_id):
         {'message': 'Cannot Delete. Resourse Not Found'}), 404
 
 
-@app.route('/api/v1/rides/<int:rides_id>', methods=['PUT'])
+@ride_blueprint.route('/api/v1/rides/<int:rides_id>', methods=['PUT'])
 @jwt_required
 def update_ride(ride_id):
     '''Route for updating a ride details'''

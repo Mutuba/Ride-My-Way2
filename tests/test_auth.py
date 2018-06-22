@@ -205,6 +205,19 @@ class UserAuthTestcase(unittest.TestCase):
         response_msg = json.loads(response.data.decode("UTF-8"))
         self.assertEqual(response_msg["message"], "Username already existing.")
 
+    def test_user_login_empty_password(self):
+        '''Test for blank password input'''
+        response = self.app.post("/api/v1/auth/login",
+                                 data=json.dumps(dict(username="daniel",
+                                                      password="")),
+                                 content_type="application/json")
+
+        self.assertEqual(response.status_code, 406)
+        response_msg = json.loads(response.data.decode("UTF-8"))
+        self.assertEqual(
+            response_msg['password-Error:']["message"],
+            "password cannot be an empty string")
+
     def test_user_login_empty_username(self):
         '''Test for blank username input'''
         response = self.app.post("/api/v1/auth/login",
@@ -218,6 +231,17 @@ class UserAuthTestcase(unittest.TestCase):
             response_msg['username-Error:']["message"],
             "username cannot be an empty string")
 
+    def test_login_missing_username(self):
+        '''Test for missing username'''
+        response = self.app.post("/api/v1/auth/login",
+                                 data=json.dumps(dict(password="12345678")),
+                                 content_type="application/json")
+
+        self.assertEqual(response.status_code, 406)
+        response_msg = json.loads(response.data.decode("UTF-8"))
+        self.assertEqual(response_msg['username-Error:']["message"],
+                         "username cannot be missing")
+
     def test_wrong_password(self):
         '''Test for wrong password'''
         response = self.app.post(
@@ -228,6 +252,32 @@ class UserAuthTestcase(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
         response_msg = json.loads(response.data.decode("UTF-8"))
         self.assertEqual(response_msg["message"], "Wrong password")
+
+    def test_login_missing_password(self):
+        '''Test for missing password'''
+        response = self.app.post(
+            "/api/v1/auth/login",
+            data=json.dumps(dict(
+                username="daniel")), content_type="application/json")
+
+        self.assertEqual(response.status_code, 406)
+        response_msg = json.loads(response.data.decode("UTF-8"))
+        self.assertEqual(response_msg['password-Error:']["message"],
+                         "password cannot be missing")
+
+    def test_user_login(self):
+        '''Test for login'''
+        response = self.app.post(
+            "/api/v1/auth/login",
+            data=json.dumps(dict(
+                username="daniel",
+                password="12345678")), content_type="application/json")
+
+        self.assertEqual(response.status_code, 200)
+        response_msg = json.loads(response.data.decode("UTF-8"))
+        self.assertEqual(
+            response_msg["message"], "You are logged in successfully")
+        self.assertTrue(response_msg['access_token'])
 
     def test_non_existing_user(self):
         '''Test for non-existing user'''
@@ -350,30 +400,6 @@ class UserAuthTestcase(unittest.TestCase):
         response_msg = json.loads(response.data.decode("UTF-8"))
         self.assertEqual(response_msg["message"],
                          "Logout successful")
-
-    #def test_password_reset(self):
-        #'''Test for password reset'''
-        #response = self.app.post(
-            #"/api/v1/auth/reset_password",
-            #data=json.dumps(dict(
-                #username="Mwangi")), headers={
-                #"Content-Type": "application/json"})
-        #self.assertEqual(response.status_code, 200)
-        #response_msg = json.loads(response.data.decode("UTF-8"))
-        #self.assertEqual(response_msg["message"],
-                         #"An email has been sent with your new password!")
-
-    def test_password_reset_no_user(self):
-        '''Test for reset if no existing user'''
-        response = self.app.post(
-            "/api/v1/auth/reset_password",
-            data=json.dumps(dict(
-                username="Waweru")), headers={
-                "Content-Type": "application/json"})
-        self.assertEqual(response.status_code, 404)
-        response_msg = json.loads(response.data.decode("UTF-8"))
-        self.assertEqual(response_msg["message"],
-                         "Non-existent user. Try signing up")
 
 
 if __name__ == '__main__':
