@@ -109,6 +109,7 @@ def get_rides():
 
 
 @ride_blueprint.route('/api/v1/rides/<int:ride_id>', methods=['GET'])
+@jwt_required
 def get_a_ride(ride_id):
     '''route to get a ride info'''
     target_ride = Ride.get_ride(ride_id)
@@ -135,6 +136,7 @@ def create_request(ride_id):
 
 
 @ride_blueprint.route('/api/v1/rides/<int:ride_id>/requests', methods=['GET'])
+@jwt_required
 def get_request(ride_id):
     '''Route to get a requets'''
     return make_response(
