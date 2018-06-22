@@ -51,10 +51,14 @@ To run tests perform the following:
 $ nosetests --with-coverage
 ```
 
+
 ## Start The Server
 To start the server run the following command
 ```
-python run.py
+Set environment variable as follows:
+set FLASK_APP=V1/__init__.py
+Then run:
+python manage.py run 
 ```
 The server will run on port: 5000
 
