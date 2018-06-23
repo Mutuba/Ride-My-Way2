@@ -63,7 +63,7 @@ class RequestsTestCase(unittest.TestCase):
     def test_get_requests(self):
         '''Test get all requests'''
         response = self.app.get(
-            "/api/v1/rides/1/requests",
+            "/api/v1/rides/requests",
             headers={
                 "Authorization": "Bearer {}".format(self.access_token),
                 "Content-Type": "application/json"})
