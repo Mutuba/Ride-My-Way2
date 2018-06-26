@@ -2,7 +2,7 @@
 from werkzeug.security import generate_password_hash
 
 
-class User:
+class User(object):
     '''Class User'''
     # Class Variables
     user_id = 0
@@ -39,7 +39,7 @@ class User:
                     return person
 
 
-class Ride:
+class Ride(object):
     '''Ride class'''
 
     # Class Variables
@@ -121,7 +121,7 @@ class Ride:
                 return njaro
 
 
-class Request:
+class Request(Ride):
     '''Class Reviews'''
     # Class variables
     request_id = 0
