@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/Mutuba/Ride-My-Way2.svg?branch=feature)](https://travis-ci.org/Mutuba/Ride-My-Way2)
 [![Coverage Status](https://coveralls.io/repos/github/Mutuba/Ride-My-Way2/badge.svg)](https://coveralls.io/github/Mutuba/Ride-My-Way2)
-utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Mutuba/Ride-My-Way2&amp;utm_campaign=Badge_Grade)
+
 ## Ride-My-Way2
 
 A Web Application that enable users(CarTax Operators) to create an account and be able to create ride offers. Passengers will be able to view the ride offers and request to join:
