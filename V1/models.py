@@ -21,13 +21,14 @@ class User(object):
         # value is a dictionay with user attributes
         User.user_id += 1
         self.users.update({
-            self.user_id:{
-                'email':self.email,
-                'username':self.username,
-                'password':self.password
-                }
+            self.user_id: {
+                'email': self.email,
+                'username': self.username,
+                'password': self.password
+            }
         })
         return self.users
+
     @staticmethod
     def change_password(user_name, data):
         '''Method to reset password'''
@@ -35,7 +36,8 @@ class User(object):
         for key in person:
             if person[key]['username'] == user_name:
                 if 'new_password' in data.keys():
-                    person[key]['password'] = generate_password_hash(data['new_password'])
+                    person[key]['password'] = generate_password_hash(
+                        data['new_password'])
                     return person
 
 
